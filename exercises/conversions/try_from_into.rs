@@ -21,7 +21,7 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
+
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -36,6 +36,19 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let is_valid = |v: i16| {
+            if v < 0 || v > 255 {
+                Err(Self::Error::IntConversion)
+            } else {
+                Ok(v as u8)
+            }
+        };
+
+        let red = is_valid(tuple.0)?;
+        let green = is_valid(tuple.1)?;
+        let blue = is_valid(tuple.2)?;
+
+        Ok(Self{ red, green, blue })
     }
 }
 
@@ -43,6 +56,19 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let is_valid = |v: i16| {
+            if v < 0 || v > 255 {
+                Err(Self::Error::IntConversion)
+            } else {
+                Ok(v as u8)
+            }
+        };
+
+        let red = is_valid(arr[0])?;
+        let green = is_valid(arr[1])?;
+        let blue = is_valid(arr[2])?;
+
+        Ok(Self{ red, green, blue })
     }
 }
 
@@ -50,6 +76,23 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(Self::Error::BadLen);
+        }
+
+        let is_valid = |v: i16| {
+            if v < 0 || v > 255 {
+                Err(Self::Error::IntConversion)
+            } else {
+                Ok(v as u8)
+            }
+        };
+
+        let red = is_valid(slice[0])?;
+        let green = is_valid(slice[1])?;
+        let blue = is_valid(slice[2])?;
+
+        Ok(Self{ red, green, blue })
     }
 }
 
